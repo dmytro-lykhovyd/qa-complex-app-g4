@@ -38,7 +38,8 @@ class TestRegistration:
 
         # Fill Username field with no more than 2 any characters
         username = f"{self.random_str()}"
-        username_field.send_keys(username)
+        username_field.send_keys(
+            username)  # Оскільки реєстрація не відбувається, можемо юзати один набір даних для кожної ітерації, але най буде рандом
         self.log.info('Username field is filled with 2 characters')
         sleep(2.0)
 
@@ -74,7 +75,8 @@ class TestRegistration:
         username_field.clear()
         self.log.info('Username field is cleared - step 1')
 
-        username_field.send_keys('   ')
+        username_field.send_keys(
+            '   ')  # Оскільки реєстрація не відбувається, можемо юзати один набір даних для кожної ітерації. Чи це нормальний паттерн в такому випадку?
         self.log.info('Username field is filled with spaces')
         sleep(2.0)
 
@@ -86,7 +88,8 @@ class TestRegistration:
         username_field.clear()
         self.log.info('Username field is cleared - step 2')
 
-        username_field.send_keys('!@#$%^&*')
+        username_field.send_keys(
+            '!@#$%^&*')  # Оскільки реєстрація не відбувається, можемо юзати один набір даних для кожної ітерації. Чи це нормальний паттерн в такому випадку?
         self.log.info('Username field is filled with noalpha nodogit characters')
         sleep(2.0)
 
