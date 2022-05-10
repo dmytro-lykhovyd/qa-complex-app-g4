@@ -1,4 +1,6 @@
 import logging
+import random
+import string
 from time import sleep
 
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -7,6 +9,16 @@ from selenium.webdriver.common.by import By
 
 class TestRegistration:
     log = logging.getLogger('[Registration]')
+
+    @staticmethod
+    def random_num():
+        """Generate random number"""
+        return str(random.randint(100000000000, 999999999999))
+
+    @staticmethod
+    def random_str(length=6):
+        """Generate random string"""
+        return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
 
     def test_registration(self):
         """
@@ -45,19 +57,18 @@ class TestRegistration:
         self.log.info('Password field is cleared')
 
         # Fill Username field
-        try:
-            username_field.send_keys('RandomName125')
-            self.log.info('Username field is filled')
-        except Exception:
-            driver.close()
-            self.log.info('That username is already taken')
+        username = f"{self.random_str()}"
+        username_field.send_keys(username)
+        self.log.info('Username field is filled')
 
         # Fill Email field
-        email_field.send_keys('random125@random.com')
+        email = f"{self.random_str()}@random.mail"
+        email_field.send_keys(email)
         self.log.info('Email field is filled')
 
         # Fill Password field
-        password_field.send_keys('123456123456')
+        password = f"{self.random_num()}"
+        password_field.send_keys(password)
         sleep(3.0)
         self.log.info('Password field is filled')
 
@@ -69,7 +80,9 @@ class TestRegistration:
 
         # Verify successful registration
         registration_confirm = driver.find_element(by=By.XPATH, value=".//p[@class='lead text-muted']")
+        create_post_button = driver.find_element(by=By.XPATH, value=".//a[@class='btn btn-sm btn-success mr-2']")
         assert registration_confirm.text.__contains__('Your feed displays'), 'Registration failed'
+        assert create_post_button.is_enabled(), 'Registration failed'
         self.log.info('Registration verified')
 
         # Close Driver
