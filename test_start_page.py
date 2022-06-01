@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 
 from constants.base import BaseConstants
 from pages.start_page import StartPage
+from pages.utils import User
 
 
 class TestStartPage:
@@ -16,6 +17,10 @@ class TestStartPage:
         driver.get(BaseConstants.BASE_URL)
         yield StartPage(driver)
         driver.close()
+
+    @pytest.fixture(scope="function")
+    def random_user(self):
+        return User()
 
     def test_empty_fields_login(self, start_page):
         """
@@ -38,7 +43,7 @@ class TestStartPage:
         start_page.verify_sign_in_error()
         self.log.info('Error message is verified')
 
-    def test_start_page_invalid_login(self, start_page):
+    def test_start_page_invalid_login(self, start_page, random_user):
         """
         - Preconditions:
             - Create Driver
@@ -53,14 +58,14 @@ class TestStartPage:
         # Fill field Login
         # Fill field Password
         # Click on 'Sign In' button
-        start_page.sign_in(username="RandomName", password="RandomPass")
+        start_page.sign_in(username=random_user.username, password=random_user.password)
         self.log.info('User try to log in with invalid credentials')
 
         # Verify error message
         start_page.verify_sign_in_error()
         self.log.info('Error message is verified')
 
-    def test_registration(self, start_page):
+    def test_registration(self, start_page, random_user):
         """
         - Preconditions:
             - Create driver
@@ -77,21 +82,15 @@ class TestStartPage:
         """
 
         # Fill Username, Email, Password
-        # - data preparing
-        # user = start_page.random_str()
-        username_value = start_page.random_str()
-        email_value = f"{username_value}@random.mail"
-        password_value = f"{start_page.random_num()}"
-
         # - sign up performing
-        start_page.sign_up(username=username_value, email=email_value, password=password_value)
+        start_page.sign_up(username=random_user.username, email=random_user.email, password=random_user.password)
         self.log.info('User is registered')
 
         # - sign up success verifying
         start_page.verify_sign_up_success()
         self.log.info('Registration verified')
 
-    def test_username_warning_length_3(self, start_page):
+    def test_username_warning_length_3(self, start_page, random_user):
         """
         - Preconditions:
             - Create driver
@@ -102,11 +101,7 @@ class TestStartPage:
             - Verify warning message
         """
 
-        # Create driver
-        # driver = WebDriver(executable_path=BaseConstants.DRIVER_PATH)
-
-        username_value_2 = start_page.random_str()
-        start_page.verify_username_long_error(username=username_value_2[:2])
+        start_page.verify_username_long_error(username=random_user.username[:2])
         self.log.info('Username field is filled with 2 random symbols')
 
     def test_username_warning_letters_numbers(self, start_page):
