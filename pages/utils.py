@@ -4,7 +4,7 @@ import string
 
 def random_num():
     """Generate random number"""
-    return str(random.randint(100000000000, 999999999999))
+    return str(random.randint(100000, 999999))
 
 
 def random_str(length=6):
