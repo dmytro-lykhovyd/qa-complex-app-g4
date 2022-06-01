@@ -1,4 +1,6 @@
 import logging
+import random
+import string
 from time import sleep
 
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -7,6 +9,16 @@ from selenium.webdriver.common.by import By
 
 class TestStartPage:
     log = logging.getLogger("[StartPage]")
+
+    @staticmethod
+    def random_num():
+        """Generate random number"""
+        return str(random.randint(100000000000, 999999999999))
+
+    @staticmethod
+    def random_str(length=6):
+        """Generate random string"""
+        return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
 
     def test_empty_fields_login(self):
         """
