@@ -28,7 +28,7 @@ class TestStartPage:
         start_page.sign_up(random_user)
         sleep(2.0)
         start_page.log_out()
-        sleep(3.0)
+        return random_user
 
     def test_empty_fields_login(self, start_page):
         """
