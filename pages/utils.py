@@ -12,6 +12,9 @@ def random_str(length=6):
     return ''.join(random.choice(string.ascii_letters) for _ in range(length))
 
 
+#  TODO: Add wrappers (03.06.22)
+
+
 class User:
 
     def __init__(self, username="", email="", password=""):
