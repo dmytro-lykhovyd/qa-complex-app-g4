@@ -23,11 +23,11 @@ class StartPage(BasePage):
         error_message = self.driver.find_element(by=By.CSS_SELECTOR, value=self.constants.SIGN_IN_ERROR_MESSAGE_XPATH)
         assert error_message.text == self.constants.SIGN_IN_ERROR_MESSAGE_TEXT, 'Text is not valid'
 
-    def sign_up(self, username="", email="", password=""):
+    def sign_up(self, user):
         """Sign-up new user with randomized credentials"""
-        self.fill_field(locator=self.constants.SIGN_UP_USERNAME_FIELD_XPATH, value=username)
-        self.fill_field(locator=self.constants.SIGN_UP_EMAIL_FIELD_XPATH, value=email)
-        self.fill_field(locator=self.constants.SIGN_UP_PASSWORD_FIELD_XPATH, value=password)
+        self.fill_field(locator=self.constants.SIGN_UP_USERNAME_FIELD_XPATH, value=user.username)
+        self.fill_field(locator=self.constants.SIGN_UP_EMAIL_FIELD_XPATH, value=user.email)
+        self.fill_field(locator=self.constants.SIGN_UP_PASSWORD_FIELD_XPATH, value=user.password)
         sleep(2.0)
         self.click_on_button(locator=self.constants.SIGN_UP_BUTTON_XPATH)
 
@@ -54,3 +54,6 @@ class StartPage(BasePage):
         error_message = self.driver.find_element(by=By.XPATH,
                                                  value=self.constants.SIGN_UP_WARNING_MESSAGE_CHARACTERS_XPATH)
         assert error_message.text == self.constants.SIGN_UP_WARNING_MESSAGE_CHARACTERS_TEXT, 'Text is not valid'
+
+    def log_out(self):
+        self.click_on_button(locator=self.constants.SIGN_OUT_BUTTON_XPATH)

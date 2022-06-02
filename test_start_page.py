@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 
 import pytest
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -21,6 +22,13 @@ class TestStartPage:
     @pytest.fixture(scope="function")
     def random_user(self):
         return User()
+
+    @pytest.fixture(scope="function")
+    def registered_user(self, start_page, random_user):
+        start_page.sign_up(random_user)
+        sleep(2.0)
+        start_page.log_out()
+        sleep(3.0)
 
     def test_empty_fields_login(self, start_page):
         """
@@ -83,7 +91,7 @@ class TestStartPage:
 
         # Fill Username, Email, Password
         # - sign up performing
-        start_page.sign_up(username=random_user.username, email=random_user.email, password=random_user.password)
+        start_page.sign_up(random_user)
         self.log.info('User is registered')
 
         # - sign up success verifying
@@ -119,3 +127,22 @@ class TestStartPage:
 
         start_page.verify_username_symbol_error(username='!@#$%^&*()')
         self.log.info('Username field is filled with special symbols')
+
+    def test_sign_in(self, start_page, registered_user):
+        """
+        - Preconditions:
+            - Create driver
+            - Open start page
+            - Sign up new user
+            - Log out
+        - Steps:
+            - Fill Username field with credentials previously generated
+            - Fill Password field with credentials previously generated
+            - Verify signing in
+        """
+
+        start_page.sign_in(username=registered_user.username, password=registered_user.password)
+        self.log.info('User "%s"" is successfully signed in', registered_user.username)
+
+        start_page.verify_sign_up_success()
+        self.log.info('Message is verified')

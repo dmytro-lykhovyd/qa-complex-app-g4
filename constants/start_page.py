@@ -22,3 +22,4 @@ class StartPageConstants:
     INVITATION_TEXT_XPATH = ".//p[@class='lead text-muted']"
     INVITATION_TEXT_MESSAGE_PART = "Your feed displays"
     CREATE_POST_BUTTON_XPATH = ".//a[@class='btn btn-sm btn-success mr-2']"
+    SIGN_OUT_BUTTON_XPATH = ".//button[text()='Sign Out']"
