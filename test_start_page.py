@@ -1,5 +1,4 @@
 import logging
-from time import sleep
 
 import pytest
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -15,6 +14,7 @@ class TestStartPage:
     @pytest.fixture(scope="function")
     def start_page(self):
         driver = WebDriver(executable_path=BaseConstants.DRIVER_PATH)
+        driver.implicitly_wait(5)
         driver.get(BaseConstants.BASE_URL)
         yield StartPage(driver)
         driver.close()
@@ -26,7 +26,6 @@ class TestStartPage:
     @pytest.fixture(scope="function")
     def registered_user(self, start_page, random_user):
         start_page.sign_up(random_user)
-        sleep(2.0)
         start_page.log_out()
         return random_user
 

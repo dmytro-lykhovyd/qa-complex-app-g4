@@ -5,7 +5,7 @@ class StartPageConstants:
     SIGN_IN_BUTTON_XPATH = ".//button[text()='Sign In']"
 
     # Sign In Error
-    SIGN_IN_ERROR_MESSAGE_XPATH = "body > div.container.py-md-5 > div.alert.alert-danger.text-center"
+    SIGN_IN_ERROR_MESSAGE_XPATH = ".//div[@class='alert alert-danger text-center']"
     SIGN_IN_ERROR_MESSAGE_TEXT = "Invalid username / pasword"
 
     # Sign Up
