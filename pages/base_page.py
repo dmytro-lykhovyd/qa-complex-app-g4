@@ -18,10 +18,10 @@ class BasePage:
         """waits until element become displayed"""
         return self.waiter.until(method=expected_conditions.visibility_of_element_located((By.XPATH, locator)))
 
-    def is_element_exists(self, locator):
+    def is_element_exists(self, locator: str) -> bool:
         """Check if certain element exists"""
         try:
-            self.driver.find_elements(By=By.XPATH, value=locator)
+            self.driver.find_elements(by=By.XPATH, value=locator)
             return True
         except (TimeoutError, NoSuchElementException):
             return False
