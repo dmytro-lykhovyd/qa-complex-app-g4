@@ -17,9 +17,3 @@ class StartPageConstants:
     SIGN_UP_WARNING_MESSAGE_LENGTH_TEXT = "Username must be at least 3 characters."
     SIGN_UP_WARNING_MESSAGE_CHARACTERS_XPATH = ".//div[text()='Username can only contain letters and numbers.']"
     SIGN_UP_WARNING_MESSAGE_CHARACTERS_TEXT = "Username can only contain letters and numbers."
-
-    # Profile page
-    INVITATION_TEXT_XPATH = ".//p[@class='lead text-muted']"
-    INVITATION_TEXT_MESSAGE_PART = "Your feed displays"
-    CREATE_POST_BUTTON_XPATH = ".//a[@class='btn btn-sm btn-success mr-2']"
-    SIGN_OUT_BUTTON_XPATH = ".//button[text()='Sign Out']"

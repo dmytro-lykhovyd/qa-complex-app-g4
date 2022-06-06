@@ -25,8 +25,8 @@ class TestStartPage:
 
     @pytest.fixture(scope="function")
     def registered_user(self, start_page, random_user):
-        start_page.sign_up(random_user)
-        start_page.log_out()
+        post_creation_page = start_page.sign_up(random_user)
+        post_creation_page.log_out()
         return random_user
 
     def test_empty_fields_login(self, start_page):
@@ -86,10 +86,10 @@ class TestStartPage:
 
         # Fill Username, Email, Password
         # - sign up performing
-        start_page.sign_up(random_user)
+        post_creation_page = start_page.sign_up(random_user)
 
         # - sign up success verifying
-        start_page.verify_sign_up_success()
+        post_creation_page.verify_sign_up_success()
 
     def test_username_warning_length_3(self, start_page, random_user):
         """
@@ -132,6 +132,6 @@ class TestStartPage:
             - Verify signing in
         """
 
-        start_page.sign_in(username=registered_user.username, password=registered_user.password)
+        post_creation_page = start_page.sign_in(username=registered_user.username, password=registered_user.password)
 
-        start_page.verify_sign_up_success()
+        post_creation_page.verify_sign_up_success()

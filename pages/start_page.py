@@ -1,7 +1,10 @@
+from time import sleep
+
 from selenium.webdriver.common.by import By
 
 from constants.start_page import StartPageConstants
 from pages.base_page import BasePage
+from pages.post_creation_page import PostCreationPage
 from pages.utils import log_wrapper, wait_until_ok
 
 
@@ -17,6 +20,7 @@ class StartPage(BasePage):
         self.fill_field(locator=self.constants.SIGN_IN_USERNAME_XPATH, value=username)
         self.fill_field(locator=self.constants.SIGN_IN_PASSWORD_XPATH, value=password)
         self.click_on_button(locator=self.constants.SIGN_IN_BUTTON_XPATH)
+        return PostCreationPage(self.driver)
 
     @log_wrapper
     def verify_sign_in_error(self):
@@ -30,24 +34,16 @@ class StartPage(BasePage):
         self.fill_field(locator=self.constants.SIGN_UP_USERNAME_FIELD_XPATH, value=user.username)
         self.fill_field(locator=self.constants.SIGN_UP_EMAIL_FIELD_XPATH, value=user.email)
         self.fill_field(locator=self.constants.SIGN_UP_PASSWORD_FIELD_XPATH, value=user.password)
-        self.click_sign_up_verify()
-        # sleep(2)
-        # self.click_on_button(locator=self.constants.SIGN_UP_BUTTON_XPATH)
+        #  self.click_sign_up_verify()
+        sleep(2)
+        self.click_on_button(locator=self.constants.SIGN_UP_BUTTON_XPATH)
+        return PostCreationPage(self.driver)
 
     @wait_until_ok(timeout=5, period=0.5)
     def click_sign_up_verify(self):
         """Click Sign Up and verify Sign Up button not exists"""
         self.click_on_button(locator=self.constants.SIGN_UP_BUTTON_XPATH)
         assert not self.is_element_exists(locator=self.constants.SIGN_UP_BUTTON_XPATH), 'Button still exists'
-
-    @log_wrapper
-    def verify_sign_up_success(self):
-        """Verify new user was sign-up successfully"""
-        registration_confirm = self.wait_until_displayed(locator=self.constants.INVITATION_TEXT_XPATH)
-        create_post_button = self.wait_until_displayed(locator=self.constants.CREATE_POST_BUTTON_XPATH)
-        assert registration_confirm.text.__contains__(self.constants.INVITATION_TEXT_MESSAGE_PART), \
-            'Registration failed'
-        assert create_post_button.is_enabled(), 'Registration failed'
 
     @log_wrapper
     def verify_username_long_error(self, username=""):
@@ -65,7 +61,3 @@ class StartPage(BasePage):
         error_message = self.driver.find_element(by=By.XPATH,
                                                  value=self.constants.SIGN_UP_WARNING_MESSAGE_CHARACTERS_XPATH)
         assert error_message.text == self.constants.SIGN_UP_WARNING_MESSAGE_CHARACTERS_TEXT, 'Text is not valid'
-
-    @log_wrapper
-    def log_out(self):
-        self.click_on_button(locator=self.constants.SIGN_OUT_BUTTON_XPATH)
