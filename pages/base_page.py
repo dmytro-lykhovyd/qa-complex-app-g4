@@ -21,7 +21,7 @@ class BasePage:
     def is_element_exists(self, locator: str) -> bool:
         """Check if certain element exists"""
         try:
-            self.driver.find_elements(by=By.XPATH, value=locator)
+            self.driver.find_element(by=By.XPATH, value=locator)
             return True
         except (TimeoutError, NoSuchElementException):
             return False

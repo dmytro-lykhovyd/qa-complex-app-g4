@@ -1,5 +1,3 @@
-from time import sleep
-
 from selenium.webdriver.common.by import By
 
 from constants.start_page import StartPageConstants
@@ -34,9 +32,7 @@ class StartPage(BasePage):
         self.fill_field(locator=self.constants.SIGN_UP_USERNAME_FIELD_XPATH, value=user.username)
         self.fill_field(locator=self.constants.SIGN_UP_EMAIL_FIELD_XPATH, value=user.email)
         self.fill_field(locator=self.constants.SIGN_UP_PASSWORD_FIELD_XPATH, value=user.password)
-        #  self.click_sign_up_verify()
-        sleep(2)
-        self.click_on_button(locator=self.constants.SIGN_UP_BUTTON_XPATH)
+        self.click_sign_up_verify()
         return PostCreationPage(self.driver)
 
     @wait_until_ok(timeout=5, period=0.5)

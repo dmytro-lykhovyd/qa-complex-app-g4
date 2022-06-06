@@ -29,6 +29,11 @@ class TestStartPage:
         post_creation_page.log_out()
         return random_user
 
+    @pytest.fixture(scope="function")
+    def signed_in_user(self, start_page, random_user):
+        post_creation_page = start_page.sign_up(random_user)
+        return post_creation_page, random_user
+
     def test_empty_fields_login(self, start_page):
         """
         - Preconditions:
@@ -131,7 +136,30 @@ class TestStartPage:
             - Fill Password field with credentials previously generated
             - Verify signing in
         """
-
         post_creation_page = start_page.sign_in(username=registered_user.username, password=registered_user.password)
 
         post_creation_page.verify_sign_up_success()
+
+    def test_create_post(self, signed_in_user):
+        """
+        - Preconditions:
+            - Create driver
+            - Open start page
+            - Sign up new user
+        - Steps:
+            - Press 'Create post' button
+            - Fill Title field
+            - Fill body field
+            - Click 'Save new post' button
+            - Verify new post was created
+        """
+        #  Go to fillable fields title, body
+
+        post_creation_page, username = signed_in_user
+        post_creation_page = post_creation_page.nav_to_create_post()
+
+        #  Fill title and body
+        post_creation_page.post_creation(title="qwerty", body="message")
+
+        #  Verify message
+        post_creation_page.verify_post_creation()

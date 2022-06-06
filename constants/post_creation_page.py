@@ -10,3 +10,5 @@ class PostCreationPageConstants:
     POST_BODY_XPATH = ".//textarea[@id='post-body']"
     UNIQUE_POST_CHECKBOX_XPATH = ".//input[@id='”UniquePost”']"
     SAVE_NEW_POST_BUTTON_XPATH = ".//button[@Class='btn btn-primary']"
+    NEW_POST_IS_CREATED_XPATH = ".//div[text()='New post successfully created.']"
+    NEW_POST_IS_CREATED_TEXT = "New post successfully created."

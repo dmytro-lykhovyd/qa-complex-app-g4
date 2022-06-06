@@ -29,8 +29,8 @@ def wait_until_ok(timeout: int, period: float):
                 except Exception as err:
                     if datetime.datetime.now() > end_time:
                         logger.warning(f"Catch: {err}")
+                        raise err
                     sleep(period)
-                    raise err
 
         return wrapper
 
@@ -60,3 +60,4 @@ class User:
 
     def __str__(self):
         return self.username
+
