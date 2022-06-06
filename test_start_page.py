@@ -1,11 +1,10 @@
 import logging
 
 import pytest
-from selenium.webdriver.chrome.webdriver import WebDriver
 
 from constants.base import BaseConstants
 from pages.start_page import StartPage
-from pages.utils import User
+from pages.utils import User, create_driver
 
 
 class TestStartPage:
@@ -13,9 +12,10 @@ class TestStartPage:
 
     @pytest.fixture(scope="function")
     def start_page(self):
-        driver = WebDriver(executable_path=BaseConstants.DRIVER_PATH)
-        driver.implicitly_wait(2)
-        driver.get(BaseConstants.BASE_URL)
+        driver = create_driver(BaseConstants.FIREFOX)
+        # driver = WebDriver(executable_path=BaseConstants.DRIVER_PATH)
+        # driver.implicitly_wait(2)
+        # driver.get(BaseConstants.BASE_URL)
         yield StartPage(driver)
         driver.close()
 

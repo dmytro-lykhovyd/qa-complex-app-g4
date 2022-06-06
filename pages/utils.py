@@ -4,6 +4,10 @@ import random
 import string
 from time import sleep
 
+from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver, WebDriver as MozillaDriver
+
+from constants.base import BaseConstants
+
 
 def random_num():
     """Generate random number"""
@@ -61,3 +65,15 @@ class User:
     def __str__(self):
         return self.username
 
+
+def create_driver(browser):
+    """Create driver according to browser"""
+    if browser == BaseConstants.CHROME:
+        driver = ChromeDriver(executable_path=BaseConstants.CHROME_DRIVER_PATH)
+    elif browser == BaseConstants.FIREFOX:
+        driver = MozillaDriver(executable_path=BaseConstants.FIREFOX_DRIVER_PATH)
+    else:
+        raise ValueError(f"Unknown browser:'{browser}'")
+    driver.implicitly_wait(2)
+    driver.get(BaseConstants.BASE_URL)
+    return driver
