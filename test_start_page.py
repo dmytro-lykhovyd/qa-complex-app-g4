@@ -1,5 +1,4 @@
 import logging
-from time import sleep
 
 import pytest
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -15,6 +14,7 @@ class TestStartPage:
     @pytest.fixture(scope="function")
     def start_page(self):
         driver = WebDriver(executable_path=BaseConstants.DRIVER_PATH)
+        driver.implicitly_wait(2)
         driver.get(BaseConstants.BASE_URL)
         yield StartPage(driver)
         driver.close()
@@ -25,10 +25,14 @@ class TestStartPage:
 
     @pytest.fixture(scope="function")
     def registered_user(self, start_page, random_user):
-        start_page.sign_up(random_user)
-        sleep(2.0)
-        start_page.log_out()
+        post_creation_page = start_page.sign_up(random_user)
+        post_creation_page.log_out()
         return random_user
+
+    @pytest.fixture(scope="function")
+    def signed_in_user(self, start_page, random_user):
+        post_creation_page = start_page.sign_up(random_user)
+        return post_creation_page, random_user
 
     def test_empty_fields_login(self, start_page):
         """
@@ -45,11 +49,9 @@ class TestStartPage:
         # Clear field Password
         # Click on 'Sign In' button
         start_page.sign_in()
-        self.log.info('Empty string user try to sign in')
 
         # Verify error message
         start_page.verify_sign_in_error()
-        self.log.info('Error message is verified')
 
     def test_start_page_invalid_login(self, start_page, random_user):
         """
@@ -67,11 +69,9 @@ class TestStartPage:
         # Fill field Password
         # Click on 'Sign In' button
         start_page.sign_in(username=random_user.username, password=random_user.password)
-        self.log.info('User try to log in with invalid credentials')
 
         # Verify error message
         start_page.verify_sign_in_error()
-        self.log.info('Error message is verified')
 
     def test_registration(self, start_page, random_user):
         """
@@ -91,12 +91,10 @@ class TestStartPage:
 
         # Fill Username, Email, Password
         # - sign up performing
-        start_page.sign_up(random_user)
-        self.log.info('User is registered')
+        post_creation_page = start_page.sign_up(random_user)
 
         # - sign up success verifying
-        start_page.verify_sign_up_success()
-        self.log.info('Registration verified')
+        post_creation_page.verify_sign_up_success()
 
     def test_username_warning_length_3(self, start_page, random_user):
         """
@@ -110,7 +108,6 @@ class TestStartPage:
         """
 
         start_page.verify_username_long_error(username=random_user.username[:2])
-        self.log.info('Username field is filled with 2 random symbols')
 
     def test_username_warning_letters_numbers(self, start_page):
         """
@@ -126,7 +123,6 @@ class TestStartPage:
         """
 
         start_page.verify_username_symbol_error(username='!@#$%^&*()')
-        self.log.info('Username field is filled with special symbols')
 
     def test_sign_in(self, start_page, registered_user):
         """
@@ -140,9 +136,30 @@ class TestStartPage:
             - Fill Password field with credentials previously generated
             - Verify signing in
         """
+        post_creation_page = start_page.sign_in(username=registered_user.username, password=registered_user.password)
 
-        start_page.sign_in(username=registered_user.username, password=registered_user.password)
-        self.log.info('User "%s"" is successfully signed in', registered_user.username)
+        post_creation_page.verify_sign_up_success()
 
-        start_page.verify_sign_up_success()
-        self.log.info('Message is verified')
+    def test_create_post(self, signed_in_user):
+        """
+        - Preconditions:
+            - Create driver
+            - Open start page
+            - Sign up new user
+        - Steps:
+            - Press 'Create post' button
+            - Fill Title field
+            - Fill body field
+            - Click 'Save new post' button
+            - Verify new post was created
+        """
+        #  Go to fillable fields title, body
+
+        post_creation_page, username = signed_in_user
+        post_creation_page = post_creation_page.nav_to_create_post()
+
+        #  Fill title and body
+        post_creation_page.post_creation(title="qwerty", body="message")
+
+        #  Verify message
+        post_creation_page.verify_post_creation()
